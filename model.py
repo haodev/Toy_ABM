@@ -10,9 +10,10 @@ from mesa import Agent, Model
 from population import Person, Town
 
 
-# 2024-01-02 is a Tuesday. 107 hours later is Saturday 11:00.
-TUESDAY = datetime(2024, 1, 2)
-HOURS_THROUGH_SATURDAY_MORNING = 4 * 24 + 11
+# 2026-10-13 is a Tuesday at midnight. The first recorded hour is 01:00.
+# 143 hours later is Sunday 2026-10-18 23:00.
+TUESDAY = datetime(2026, 10, 13)
+HOURS_THROUGH_SUNDAY_NIGHT = 5 * 24 + 23
 GROCERY_PROBABILITY = 0.3
 
 
@@ -68,7 +69,7 @@ class TownModel(Model):
 def run_clock(
     town: Town,
     start: datetime = TUESDAY,
-    hours: int = HOURS_THROUGH_SATURDAY_MORNING,
+    hours: int = HOURS_THROUGH_SUNDAY_NIGHT,
     seed: int = 42,
 ) -> dict[str, dict]:
     """Step the Mesa model and return minute -> {homes, places}."""

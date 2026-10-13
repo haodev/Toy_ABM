@@ -5,7 +5,7 @@ from pathlib import Path
 from census import load_census
 from export import people_at, write_outputs
 from geometry import load_zone
-from model import HOURS_THROUGH_SATURDAY_MORNING, TUESDAY, run_clock
+from model import HOURS_THROUGH_SUNDAY_NIGHT, TUESDAY, run_clock
 from places import load_places
 from population import build_town
 
@@ -14,13 +14,30 @@ def main() -> None:
     zone = load_zone()
     census = load_census(zone)
     places = load_places(zone)
+    print(f"places {len(places)}")
+    for place in places[:5]:
+        print(
+            place.place_id,
+            place.function,
+            place.name,
+            place.latitude,
+            place.longitude,
+            place.cbg,
+            place.placeholder,
+        )
     town = build_town(zone, census, places)
-    patterns = run_clock(town, start=TUESDAY, hours=HOURS_THROUGH_SATURDAY_MORNING)
+    ### ================= change the time frame here ================= ###
+    patterns = run_clock(town, start=TUESDAY, hours=HOURS_THROUGH_SUNDAY_NIGHT)
     out = Path(__file__).resolve().parent / "output"
     write_outputs(town, out, patterns)
     print(f"people {len(town.people)} homes {len(town.homes)} places {len(town.places)}")
     print(f"wrote {out}")
-    for minute, label in ((600, "Tuesday 10:00"), (1200, "Tuesday 20:00"), (6420, "Saturday 11:00")):
+    for minute, label in (
+        (600, "Tuesday 10:00"),
+        (1200, "Tuesday 20:00"),
+        (6420, "Saturday 11:00"),
+        (8580, "Sunday 23:00"),
+    ):
         print(label, _tally(town, patterns, minute))
 
 
